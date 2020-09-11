@@ -11,6 +11,9 @@
  */
 package org.b3log.solo.repository;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -18,14 +21,16 @@ import org.apache.logging.log4j.Logger;
 import org.b3log.latke.Keys;
 import org.b3log.latke.Latkes;
 import org.b3log.latke.ioc.BeanManager;
-import org.b3log.latke.repository.*;
+import org.b3log.latke.repository.AbstractRepository;
+import org.b3log.latke.repository.FilterOperator;
+import org.b3log.latke.repository.PropertyFilter;
+import org.b3log.latke.repository.Query;
+import org.b3log.latke.repository.RepositoryException;
+import org.b3log.latke.repository.SortDirection;
 import org.b3log.latke.repository.annotation.Repository;
 import org.b3log.solo.model.Article;
 import org.b3log.solo.model.Tag;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Tag-Article repository.
@@ -66,7 +71,7 @@ public class TagArticleRepository extends AbstractRepository {
                 "ORDER BY\n" +
                 "\tcnt DESC\n" +
                 "LIMIT ?", num);
-        final List<JSONObject> ret = new ArrayList<>();
+		final List<JSONObject> ret = new LinkedList<>();
         final TagRepository tagRepository = BeanManager.getInstance().getReference(TagRepository.class);
         for (final JSONObject record : records) {
             final String tagId = record.optString(Tag.TAG + "_" + Keys.OBJECT_ID);
